@@ -1060,10 +1060,10 @@ namespace lighttool
         public System.Collections.Generic.Dictionary<string, sprite> sprites = new Dictionary<string, sprite>();
         private void _parse(string txt)
         {
-            var json = JSON.Parse(txt).ToDynamic();
-            this.textureurl = json["t"];
-            this.texturewidth = json["w"];
-            this.textureheight = json["h"];
+            var json = JSON.Parse(txt);
+            this.textureurl = json["t"].As<String>();
+            this.texturewidth = json["w"].As<int>();
+            this.textureheight = json["h"].As<int>();
             var s = (object[])json["s"];
 
             for (var i = 0; i < s.Length; i++)
@@ -1104,13 +1104,17 @@ namespace lighttool
         public float yOffset;
         public float xAddvance;//字符宽度
     }
+    public class spriteDynamicFont
+    {
+
+    }
     public class spriteFont
     {
         public WebGLRenderingContext webgl;
         public spriteTexture texture;
         public spriteMat mat;
 
-        public dynamic cmap;
+        public Object cmap;
         public string fontname;
         public float pointSize;//像素尺寸
         public float padding;//间隔
@@ -1226,7 +1230,7 @@ namespace lighttool
 
         public void drawChar(spriteBatcher sb, string cname, spriteRect rect, spriteColor c = null, spriteColor colorBorder = null)
         {
-            var r = this.cmap[cname];
+            var r = this.cmap[cname] as charinfo;
             if (r == Script.Undefined) return;
             if (c == null)
                 c = spriteColor.white;

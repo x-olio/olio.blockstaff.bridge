@@ -325,11 +325,11 @@ namespace lighttool
             var f = fontMgr.Instance().load(this.webgl, font);
             if (f == null) return;
             if (f.cmap == Script.Undefined) return;
-            var xadd = 0;
+            float xadd = 0;
             for (var i = 0; i < text.Length; i++)
             {
                 var c = text.CharAt(i);
-                var cinfo = f.cmap[c];
+                var cinfo = f.cmap[c] as charinfo;
                 if (cinfo == Script.Undefined)
                 {
                     continue;
@@ -346,7 +346,7 @@ namespace lighttool
                 this.trect.h = s * cinfo.ySize;
                 this.trect.w = s * cinfo.xSize;
 
-                xadd += cinfo.xAddvance * s;
+                xadd += (cinfo.xAddvance * s);
                 if (xadd >= rect.w)
                     break;//超出绘制限定框，不画了
                 f.draw(this.spriteBatcher, cinfo, this.trect, color, color2);

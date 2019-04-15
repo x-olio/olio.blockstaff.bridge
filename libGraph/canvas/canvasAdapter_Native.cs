@@ -36,8 +36,8 @@ namespace lighttool.Native
 
                    c.spriteBatcher.enddraw();
 
-                   dynamic _webgl = webgl;
-                   _webgl.flush();
+                   //dynamic _webgl = webgl;
+                   //_webgl.flush();
                    //webgl.Flush();
 
                }, 20);
