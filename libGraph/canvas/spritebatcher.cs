@@ -217,9 +217,9 @@ namespace lighttool
         {
             foreach (var name in this.mapshader.Keys)
             {
-                Console.WriteLine("shadername:" + name);
-                Console.WriteLine("vs:" + this.mapshader[name].vscode);
-                Console.WriteLine("fs:" + this.mapshader[name].fscode);
+                Bridge.Html5.Console.Info("shadername:" + name);
+                Bridge.Html5.Console.Info("vs:" + this.mapshader[name].vscode);
+                Bridge.Html5.Console.Info("fs:" + this.mapshader[name].fscode);
             }
 
         }
@@ -1183,7 +1183,7 @@ namespace lighttool
 
             var d2 = new Date().ValueOf();
             var n = d2 - d1;
-            Console.WriteLine("json time=" + n);
+            Bridge.Html5.Console.Info("json time=" + n);
 
         }
         spritePoint[] pointbuf = {

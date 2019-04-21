@@ -51,6 +51,9 @@
     <Reference Include="Bridge.Html5, Version=17.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bridge.Html5.17.7.0\lib\net40\Bridge.Html5.dll</HintPath>
     </Reference>
+    <Reference Include="Bridge.Html5.Console, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bridge.Html5.Console.1.11.0\lib\net40\Bridge.Html5.Console.dll</HintPath>
+    </Reference>
     <Reference Include="Bridge.WebGL, Version=1.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bridge.WebGL.1.20.0\lib\net40\Bridge.WebGL.dll</HintPath>
     </Reference>
@@ -72,10 +75,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="app_canvastest.cs" />
+    <Compile Include="http\http_tool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bridge.json" />
+    <Compile Include="app_blockserver.test.cs" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
