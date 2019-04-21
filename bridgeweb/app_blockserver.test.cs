@@ -87,6 +87,7 @@ namespace bridgeweb
         string logintoken = null;
         void InitHTML()
         {
+            string url = "http://cafe.f3322.net:17280";
             var div = Document.CreateElement<HTMLDivElement>("div");
             div.Style.Width = "100%";
             div.Style.Height = "100%";
@@ -94,29 +95,66 @@ namespace bridgeweb
             div.Style.Overflow = "hidden";
             Document.Body.AppendChild(div);
 
-            var username = AddInputBox(div, "username", "abc");
+            var username = AddInputBox(div, "username", "abcd");
             var password = AddPasswordBox(div, "password", "00");
             var btnlogin = AddButton(div, "login");
+            var btnReg = AddButton(div, "register");
             AddHR(div);
 
             this.outputList = AddTextArea(div, 800, 300);
+            var clearBtn = AddButton(div, "clear");
+            clearBtn.OnClick = (e) =>
+              {
+                  LogClear();
+              };
 
+            var helpBtn = AddButton(div, "help");
+            helpBtn.OnClick = async (e) =>
+              {
+                  var result = await http.http_tool.httpJsonRPC(url + "/rpc", "help", new string[] { });
+                  Log("reg=" + result);
+
+              };
+            AddHR(div);
+
+            btnReg.OnClick = async (e) =>
+              {
+                  var pass = System.Text.Encoding.UTF8.GetBytes(username.Value + "_" + password.Value);
+                  var passhashdata = OLIO.Cryptography.Sha256.computeHash(pass);
+                  var pashhashhex = http.http_tool.Hex2Str(passhashdata);
+                  Log("passhash=" + pashhashhex);
+
+                  string[] myparams = new string[] { username.Value, pashhashhex };
+                  var result = await http.http_tool.httpJsonRPC(url + "/rpc", "user_new", myparams);
+                  var jsonresult = JSON.Parse(result);
+                  if (jsonresult["result"]["result"].As<bool>() == true)
+                  {
+                      Log("create user succ");
+                  }
+                  else
+                  {
+                      Log("create user fail");
+                  }
+              };
             btnlogin.OnClick = async (e) =>
             {
-                outputList.TextContent += "good day" + "\n";
-                string[] myparams = new string[] { username.Value, password.Value };
-                var result = await http.http_tool.httpJsonRPC("http://127.0.0.1/rpc", "user_login", myparams);
+                var pass = System.Text.Encoding.UTF8.GetBytes(username.Value + "_" + password.Value);
+                var passhashdata = OLIO.Cryptography.Sha256.computeHash(pass);
+                var pashhashhex = http.http_tool.Hex2Str(passhashdata);
+
+                string[] myparams = new string[] { username.Value, pashhashhex };
+                var result = await http.http_tool.httpJsonRPC(url + "/rpc", "user_login", myparams);
                 var jsonresult = JSON.Parse(result);
                 if (jsonresult["result"]["result"].As<bool>() == true)
                 {
                     var token = jsonresult["result"]["token"].As<string>();
-                    AddOutput("login token=" + token);
+                    Log("login token=" + token);
                     logintoken = token;
                     loginuser = username.Value;
                 }
                 else
                 {
-                    AddOutput("login fail");
+                    Log("login fail");
                     loginuser = null;
                     logintoken = null;
                 }
@@ -127,7 +165,7 @@ namespace bridgeweb
             var file = AddFile(div, "upload a file.");
             file.OnChange = (e) =>
               {
-                  AddOutput("size=" + file.Files[0].Size);
+                  Log("size=" + file.Files[0].Size);
               };
 
 
@@ -137,17 +175,20 @@ namespace bridgeweb
                 var _file = file.Files[0];
 
                 var size = _file.Size;
-                AddOutput("size=" + size);
+                Log("size=" + size);
                 var filestream = await _file.GetFileStreamAsync();
                 byte[] buf = new byte[size];
                 filestream.Read(buf, 0, buf.Length);
 
-                string result = await http.http_tool.httpPost("http://127.0.0.1/uploadraw", "abc", logintoken, _file);
-                AddOutput("result=" + result);
+                string result = await http.http_tool.httpPost(url + "/uploadraw", loginuser, logintoken, _file);
+                Log("result=" + result);
             };
         }
-
-        void AddOutput(string txt)
+        void LogClear()
+        {
+            outputList.TextContent = "";
+        }
+        void Log(string txt)
         {
             outputList.TextContent += txt + "\n";
         }

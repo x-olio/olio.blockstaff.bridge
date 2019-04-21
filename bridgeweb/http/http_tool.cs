@@ -7,6 +7,15 @@ namespace bridgeweb.http
 {
     public class http_tool
     {
+        public static string Hex2Str(byte[] data)
+        {
+            string strout = "";
+            for(var i=0;i<data.Length;i++)
+            {
+                strout += data[i].ToString("X02");
+            }
+            return strout;
+        }
         public async static System.Threading.Tasks.Task<string> httpPost(string url,string username,string token,File file)
         {
             Bridge.Html5.XMLHttpRequest _http = new XMLHttpRequest();
