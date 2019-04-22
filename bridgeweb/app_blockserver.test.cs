@@ -87,7 +87,7 @@ namespace bridgeweb
         string logintoken = null;
         void InitHTML()
         {
-            string url = "http://cafe.f3322.net:17280";
+            string url = "https://cafe.f3322.net:17201";
             var div = Document.CreateElement<HTMLDivElement>("div");
             div.Style.Width = "100%";
             div.Style.Height = "100%";
